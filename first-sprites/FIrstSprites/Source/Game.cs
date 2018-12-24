@@ -8,6 +8,8 @@ namespace TwoDPlatformer
     {
         public GraphicsDeviceManager graphicsDevice;
         public SpriteBatch spriteBatch;
+
+        private Texture2D body;
         
         public Game()
         {
@@ -26,12 +28,17 @@ namespace TwoDPlatformer
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Content.RootDirectory = "Assets";
+
+            body = Content.Load<Texture2D>("Sprites/Body");
         }
 
         protected override void UnloadContent()
         {
         }
 
+        private Vector2 position = Vector2.Zero;
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back ==
@@ -40,7 +47,14 @@ namespace TwoDPlatformer
             {
                 Exit();
             }
-            
+
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                position.X--;
+            } else if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                position.X++;
+            }
             
             base.Update(gameTime);
         }
@@ -50,6 +64,9 @@ namespace TwoDPlatformer
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
+            
+            spriteBatch.Draw(body, position, Color.White);
+            
             spriteBatch.End();
 
             base.Draw(gameTime);
