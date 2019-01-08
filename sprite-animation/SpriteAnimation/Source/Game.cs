@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TwoDPlatformer.Entities;
 
 namespace TwoDPlatformer
 {
@@ -9,19 +10,20 @@ namespace TwoDPlatformer
         public GraphicsDeviceManager graphicsDevice;
         public SpriteBatch spriteBatch;
 
-        private Texture2D body;
-        
+        private Player player;        
         public Game()
         {
             graphicsDevice = new GraphicsDeviceManager(this)
             {
                 PreferMultiSampling = true
             };
-           
+
         }
 
         protected override void Initialize()
         {
+            Components.Add(new Player(this));
+
             base.Initialize();
         }
 
@@ -30,15 +32,13 @@ namespace TwoDPlatformer
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             Content.RootDirectory = "Assets";
-
-            body = Content.Load<Texture2D>("Sprites/Body");
+            base.LoadContent();
         }
 
         protected override void UnloadContent()
         {
         }
 
-        private Vector2 position = Vector2.Zero;
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back ==
@@ -47,27 +47,13 @@ namespace TwoDPlatformer
             {
                 Exit();
             }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-            {
-                position.X--;
-            } else if (Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                position.X++;
-            }
             
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-
-            spriteBatch.Begin();
-            
-            spriteBatch.Draw(body, position, Color.White);
-            
-            spriteBatch.End();
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
             base.Draw(gameTime);
         }
